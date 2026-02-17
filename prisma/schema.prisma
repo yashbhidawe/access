@@ -45,6 +45,7 @@ model OrgMember {
 model Role {
   id          String       @id @default(uuid())
   name        String
+  members     OrgMember[] 
   permissions RolePermission[]
 }
 
