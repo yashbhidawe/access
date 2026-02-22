@@ -17,7 +17,7 @@ export class OrgsController {
 
   @Post()
   create(@Body() dto: CreateOrgDto) {
-    const fakeUserId = '12345';
+    const fakeUserId = 'bd9050ca-f8e0-4439-9589-1475f1e7a5e4';
     return this.orgsService.create(fakeUserId, dto.name);
   }
 
