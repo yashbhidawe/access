@@ -28,16 +28,16 @@ export class OrgsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.orgsService.findOne(+id);
+    return this.orgsService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateOrgDto: UpdateOrgDto) {
-    return this.orgsService.update(+id, updateOrgDto);
+    return this.orgsService.update(id, updateOrgDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.orgsService.remove(+id);
+    return this.orgsService.remove(id);
   }
 }

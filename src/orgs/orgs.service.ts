@@ -30,13 +30,13 @@ export class OrgsService {
   findAll() {
     return `This action returns all orgs`;
   }
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} org`;
   }
-  update(id: number, updateOrgDto: UpdateOrgDto) {
+  update(id: string, updateOrgDto: UpdateOrgDto) {
     return `This action updates a #${id} org`;
   }
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} org`;
   }
 }
