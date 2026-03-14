@@ -1,28 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { SignInDto } from './dto/signin.dto';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private userService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
   async signUp(createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  async signIn(signInDto: SignInDto) {
+  async signIn(signInDto: SignInDto): Promise<{ access_token: string }> {
     const user = await this.userService
       .findAll()
       .then((users) => users.find((user) => user.email === signInDto.email));
     if (!user) {
-      return { message: 'User not found' };
+      throw new UnauthorizedException('User not found');
     }
     const isMatch = await bcrypt.compare(signInDto.password, user.password);
     if (!isMatch) {
-      return { message: 'Invalid credentials' };
+      throw new UnauthorizedException('Invalid credentials');
     }
-    return { message: 'Sign in successful' };
+    const payload = { email: user.email, id: user.id };
+    return { access_token: this.jwtService.sign(payload) };
   }
 }
