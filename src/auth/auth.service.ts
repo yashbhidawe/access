@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Get,
+  Injectable,
+  Request,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { SignInDto } from './dto/signin.dto';
@@ -27,7 +32,11 @@ export class AuthService {
     if (!isMatch) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const payload = { email: user.email, id: user.id };
+    const payload = { email: user.email, id: user.id, name: user.name };
     return { access_token: this.jwtService.sign(payload) };
+  }
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 }
