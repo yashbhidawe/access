@@ -25,22 +25,26 @@ export class OrgsController {
   }
 
   @Get()
-  findAll() {
-    return this.orgsService.findAll();
+  findAll(@Request() req) {
+    return this.orgsService.findAll(req.user.id);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orgsService.findOne(id);
+  findOne(@Request() req, @Param('id') id: string) {
+    return this.orgsService.findOne(req.user.id, id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrgDto: UpdateOrgDto) {
-    return this.orgsService.update(id, updateOrgDto);
+  update(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() updateOrgDto: UpdateOrgDto,
+  ) {
+    return this.orgsService.update(req.user.id, id, updateOrgDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orgsService.remove(id);
+  remove(@Request() req, @Param('id') id: string) {
+    return this.orgsService.remove(req.user.id, id);
   }
 }
