@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Patch,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -19,9 +20,8 @@ export class OrgsController {
   constructor(private readonly orgsService: OrgsService) {}
 
   @Post()
-  create(@Body() dto: CreateOrgDto) {
-    const fakeUserId = 'bd9050ca-f8e0-4439-9589-1475f1e7a5e4';
-    return this.orgsService.create(fakeUserId, dto.name);
+  create(@Request() req, @Body() dto: CreateOrgDto) {
+    return this.orgsService.create(req.user.id, dto.name);
   }
 
   @Get()

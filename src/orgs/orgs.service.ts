@@ -1,26 +1,24 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateOrgDto } from './dto/create-org.dto';
+import { Injectable } from '@nestjs/common';
 import { UpdateOrgDto } from './dto/update-org.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class OrgsService {
   constructor(private prisma: PrismaService) {}
-  async create(userId: string, name: string) {
-    const ownerRole = await this.prisma.role.findFirst({
-      where: { name: 'owner' },
-    });
 
-    if (!ownerRole) {
-      throw new NotFoundException('Owner role not found');
-    }
+  async create(userId: string, name: string) {
+    const ownerRole = await this.prisma.role.upsert({
+      where: { name: 'owner' },
+      update: {},
+      create: { name: 'owner' },
+    });
 
     return this.prisma.org.create({
       data: {
-        name: name,
+        name,
         members: {
           create: {
-            userId: userId,
+            userId,
             roleId: ownerRole.id,
           },
         },
