@@ -22,9 +22,7 @@ export class AuthService {
   }
 
   async signIn(signInDto: SignInDto): Promise<{ access_token: string }> {
-    const user = await this.userService
-      .findAll()
-      .then((users) => users.find((user) => user.email === signInDto.email));
+    const user = await this.userService.findByEmail(signInDto.email);
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
